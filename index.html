@@ -1,13 +1,158 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Mortgage Loan Calculator</title>
+    <script defer type="module" src="/src/main.ts"></script>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <main>
+      <h1>Mortgage Loan Calculator</h1>
+
+      <div>
+        <!-- INPUT SECTION -->
+        <section>
+          <h2>Loan Details</h2>
+
+          <form id="mortgage-form">
+            <fieldset>
+              <legend>Loan Information</legend>
+
+              <div>
+                <label for="loan-amount">Loan Amount ($)</label>
+                <input
+                  id="loan-amount"
+                  type="number"
+                  min="1000"
+                  step="1000"
+                  value="250000"
+                  name="loan-amount"
+                  required
+                />
+              </div>
+
+              <div>
+                <label for="interest-rate">Interest Rate (%)</label>
+                <input
+                  id="interest-rate"
+                  type="number"
+                  min="0.1"
+                  max="30"
+                  step="0.1"
+                  value="4.5"
+                  name="interest-rate"
+                  required
+                />
+              </div>
+
+              <div>
+                <label for="loan-term">Loan Term (years)</label>
+                <input
+                  id="loan-term"
+                  type="number"
+                  min="1"
+                  max="40"
+                  value="30"
+                  name="loan-term"
+                  required
+                />
+              </div>
+
+              <div>
+                <label for="payment-frequency">Payment Frequency</label>
+                <select id="payment-frequency" name="payment-frequency">
+                  <option value="12">Monthly</option>
+                  <option value="26">Bi-weekly</option>
+                  <option value="52">Weekly</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="down-payment">Down Payment ($)</label>
+                <input
+                  id="down-payment"
+                  type="number"
+                  min="0"
+                  step="1000"
+                  value="50000"
+                  name="down-payment"
+                />
+              </div>
+            </fieldset>
+
+            <button type="submit">Calculate</button>
+          </form>
+        </section>
+
+        <!-- RESULTS SECTION -->
+        <section>
+          <h2>Payment Summary</h2>
+
+          <div>
+            <div>
+              <h3>Monthly Payment</h3>
+
+              <output
+                id="monthly-payment"
+                for="mortgage-form"
+                aria-live="polite"
+                >$0.00</output
+              >
+            </div>
+
+            <div>
+              <h3>Total Payment</h3>
+              <output id="total-payment" for="mortgage-form" aria-live="polite"
+                >$0.00</output
+              >
+            </div>
+
+            <div>
+              <h3>Total Interest</h3>
+              <output id="total-interest" for="mortgage-form" aria-live="polite"
+                >$0.00</output
+              >
+            </div>
+          </div>
+
+          <div>
+            <canvas id="payment-chart"></canvas>
+          </div>
+        </section>
+
+        <!-- AMORTIZATION TABLE SECTION -->
+        <section>
+          <h2>Amortization Schedule</h2>
+
+          <div>
+            <table id="amortization-table">
+              <thead>
+                <tr>
+                  <th>Payment #</th>
+                  <th>Payment Date</th>
+                  <th>Payment Amount</th>
+                  <th>Principal</th>
+                  <th>Interest</th>
+                  <th>Remaining Balance</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <!-- Amortization data will be inserted here -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- PAGINATION CONTROLS -->
+          <nav aria-label="Amortization Table Pagination">
+            <button id="prev-page" disabled>&laquo; Previous</button>
+            <span id="page-info">Page 1 of 1</span>
+            <button id="next-page">Next &raquo;</button>
+          </nav>
+        </section>
+      </div>
+    </main>
   </body>
 </html>

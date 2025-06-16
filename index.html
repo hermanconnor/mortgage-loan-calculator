@@ -119,69 +119,80 @@
             Payment Summary
           </h2>
 
-          <div>
-            <div>
-              <h3>Monthly Payment</h3>
+          <div
+            class="grid grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] gap-4 mb-6"
+          >
+            <div class="bg-gray-50 text-center p-4 rounded-lg">
+              <h3 class="text-gray-500 font-bold">Monthly Payment</h3>
 
               <output
                 id="monthly-payment"
                 for="mortgage-form"
                 aria-live="polite"
+                class="font-bold text-blue-600 text-2xl"
                 >$0.00</output
               >
             </div>
 
-            <div>
-              <h3>Total Payment</h3>
-              <output id="total-payment" for="mortgage-form" aria-live="polite"
+            <div class="bg-gray-50 text-center p-4 rounded-lg">
+              <h3 class="text-gray-500 font-bold">Total Payment</h3>
+              <output
+                id="total-payment"
+                for="mortgage-form"
+                aria-live="polite"
+                class="font-bold text-blue-600 text-2xl"
                 >$0.00</output
               >
             </div>
 
-            <div>
-              <h3>Total Interest</h3>
-              <output id="total-interest" for="mortgage-form" aria-live="polite"
+            <div class="bg-gray-50 text-center p-4 rounded-lg">
+              <h3 class="text-gray-500 font-bold">Total Interest</h3>
+              <output
+                id="total-interest"
+                for="mortgage-form"
+                aria-live="polite"
+                class="font-bold text-blue-600 text-2xl"
                 >$0.00</output
               >
             </div>
           </div>
 
-          <div>
+          <div class="mt-6 h-52">
             <canvas id="payment-chart"></canvas>
           </div>
         </section>
-
-        <!-- AMORTIZATION TABLE SECTION -->
-        <section>
-          <h2>Amortization Schedule</h2>
-
-          <div>
-            <table id="amortization-table">
-              <thead>
-                <tr>
-                  <th>Payment #</th>
-                  <th>Payment Date</th>
-                  <th>Payment Amount</th>
-                  <th>Principal</th>
-                  <th>Interest</th>
-                  <th>Remaining Balance</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <!-- Amortization data will be inserted here -->
-              </tbody>
-            </table>
-          </div>
-
-          <!-- PAGINATION CONTROLS -->
-          <nav aria-label="Amortization Table Pagination">
-            <button id="prev-page" disabled>&laquo; Previous</button>
-            <span id="page-info">Page 1 of 1</span>
-            <button id="next-page">Next &raquo;</button>
-          </nav>
-        </section>
       </div>
+
+      <!-- AMORTIZATION TABLE SECTION -->
+      <section class="bg-white p-6 rounded-xl shadow">
+        <h2>Amortization Schedule</h2>
+
+        <div>
+          <table id="amortization-table" class="w-full">
+            <thead>
+              <tr>
+                <th>Payment #</th>
+                <th>Payment Date</th>
+                <th>Payment Amount</th>
+                <th>Principal</th>
+                <th>Interest</th>
+                <th>Remaining Balance</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!-- Amortization data will be inserted here -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGINATION CONTROLS -->
+        <nav aria-label="Amortization Table Pagination">
+          <button id="prev-page" disabled>&laquo; Previous</button>
+          <span id="page-info">Page 1 of 1</span>
+          <button id="next-page">Next &raquo;</button>
+        </nav>
+      </section>
     </main>
   </body>
 </html>

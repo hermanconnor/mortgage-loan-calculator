@@ -120,7 +120,7 @@
           </h2>
 
           <div
-            class="grid grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] gap-4 mb-6"
+            class="grid grid-cols-1 md:grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))] gap-4 mb-6"
           >
             <div class="bg-gray-50 text-center p-4 rounded-lg">
               <h3 class="text-gray-500 font-bold">Monthly Payment</h3>
@@ -165,18 +165,44 @@
 
       <!-- AMORTIZATION TABLE SECTION -->
       <section class="bg-white p-6 rounded-xl shadow">
-        <h2>Amortization Schedule</h2>
+        <h2 class="text-blue-600 text-2xl font-semibold mb-6">
+          Amortization Schedule
+        </h2>
 
-        <div>
-          <table id="amortization-table" class="w-full">
+        <div class="overflow-x-auto">
+          <table id="amortization-table" class="w-full border-collapse mt-4">
             <thead>
               <tr>
-                <th>Payment #</th>
-                <th>Payment Date</th>
-                <th>Payment Amount</th>
-                <th>Principal</th>
-                <th>Interest</th>
-                <th>Remaining Balance</th>
+                <th
+                  class="p-3 text-left text-gray-500 border-b bg-gray-50 font-semibold"
+                >
+                  Payment #
+                </th>
+                <th
+                  class="p-3 text-left text-gray-500 border-b bg-gray-50 font-semibold"
+                >
+                  Payment Date
+                </th>
+                <th
+                  class="p-3 text-left text-gray-500 border-b bg-gray-50 font-semibold"
+                >
+                  Payment Amount
+                </th>
+                <th
+                  class="p-3 text-left text-gray-500 border-b bg-gray-50 font-semibold"
+                >
+                  Principal
+                </th>
+                <th
+                  class="p-3 text-left text-gray-500 border-b bg-gray-50 font-semibold"
+                >
+                  Interest
+                </th>
+                <th
+                  class="p-3 text-left text-gray-500 border-b bg-gray-50 font-semibold"
+                >
+                  Remaining Balance
+                </th>
               </tr>
             </thead>
 
@@ -187,10 +213,24 @@
         </div>
 
         <!-- PAGINATION CONTROLS -->
-        <nav aria-label="Amortization Table Pagination">
-          <button id="prev-page" disabled>&laquo; Previous</button>
-          <span id="page-info">Page 1 of 1</span>
-          <button id="next-page">Next &raquo;</button>
+        <nav
+          aria-label="Amortization Table Pagination"
+          class="flex justify-center items-center gap-4 mt-6"
+        >
+          <button
+            id="prev-page"
+            class="text-white bg-blue-600 px-4 py-1.5 border-none rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled
+          >
+            &laquo; Previous
+          </button>
+          <span id="page-info" class="text-gray-500">Page 1 of 1</span>
+          <button
+            id="next-page"
+            class="text-white bg-blue-600 px-4 py-1.5 border-none rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next &raquo;
+          </button>
         </nav>
       </section>
     </main>

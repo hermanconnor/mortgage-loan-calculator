@@ -41,4 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
     'next-page',
   ) as HTMLButtonElement;
   const pageInfoEl = document.getElementById('page-info') as HTMLElement;
+
+  // CHART INITIALIZATION
+  let paymentChart: any;
+
+  // PAGINATION STATE VARIABLES
+  let currentPage: number = 1;
+  const paymentsPerPage: number = 12;
+  let amortizationSchedule: AmortizationScheduleEntry[] = [];
 });

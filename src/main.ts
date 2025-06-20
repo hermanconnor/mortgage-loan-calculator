@@ -1,7 +1,7 @@
 import './style.css';
 import { Chart } from 'chart.js';
 import type { AmortizationScheduleEntry } from './types';
-import { formatCurrency } from './utils/formatters';
+import { formatCurrency, formatDate } from './utils/formatters';
 
 document.addEventListener('DOMContentLoaded', () => {
   const mortgageForm = document.getElementById(
@@ -47,9 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let paymentChart: any;
 
   // PAGINATION STATE VARIABLES
+  let amortizationSchedule: AmortizationScheduleEntry[] = [];
   let currentPage: number = 1;
   const paymentsPerPage: number = 12;
-  let amortizationSchedule: AmortizationScheduleEntry[] = [];
 
   const updateChart = (principal: number, interest: number): void => {
     const canvas = document.getElementById(
@@ -99,5 +99,53 @@ document.addEventListener('DOMContentLoaded', () => {
         },
       },
     });
+  };
+
+  const displayCurrentPage = (): void => {
+    amortizationTable.innerHTML = '';
+
+    const totalPages = Math.ceil(amortizationSchedule.length / paymentsPerPage);
+
+    pageInfoEl.textContent = `Page ${currentPage} of ${totalPages}`;
+
+    prevPageButton.disabled = currentPage === 1;
+    nextPageButton.disabled = currentPage === totalPages;
+
+    const startIndex = (currentPage - 1) * paymentsPerPage;
+    const endIndex = Math.min(
+      startIndex + paymentsPerPage,
+      amortizationSchedule.length,
+    );
+
+    for (let i = startIndex; i < endIndex; i++) {
+      const payment = amortizationSchedule[i];
+
+      const row = document.createElement('tr');
+      row.classList.add('hover:bg-gray-50');
+
+      row.innerHTML = `
+        <td class="p-3 text-left border-b">${payment.paymentNumber}</td>
+        <td>${formatDate(payment.paymentDate)}</td>
+        <td>${formatCurrency(payment.paymentAmount)}</td>
+        <td>${formatCurrency(payment.principalPayment)}</td>
+        <td>${formatCurrency(payment.interestPayment)}</td>
+        <td>${formatCurrency(payment.remainingBalance)}</td>
+      `;
+
+      amortizationTable.appendChild(row);
+    }
+  };
+
+  const updateAmortizationTable = (
+    schedule: AmortizationScheduleEntry[],
+  ): void => {
+    // Store the full schedule globally for pagination
+    amortizationSchedule = schedule;
+
+    // Reset to first page when recalculating
+    currentPage = 1;
+
+    // Update the table with the current page
+    displayCurrentPage();
   };
 });

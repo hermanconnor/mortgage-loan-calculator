@@ -127,4 +127,64 @@ document.addEventListener('DOMContentLoaded', () => {
       displayCurrentPage();
     }
   });
+
+  mortgageForm.addEventListener('submit', (e: SubmitEvent) => {
+    e.preventDefault();
+
+    const loanAmountRaw = parseFloat(loanAmountInput.value) || 0;
+    const downPaymentRaw = parseFloat(downPaymentInput.value || '0') || 0;
+    const loanAmount: number = loanAmountRaw - downPaymentRaw;
+    const interestRate = parseFloat(interestRateInput.value) || 0;
+    const loanTerm = parseInt(loanTermInput.value) || 0;
+    const paymentFrequency = parseInt(paymentFrequencySelect.value) || 0;
+
+    if (
+      loanAmount <= 0 ||
+      interestRate < 0 ||
+      loanTerm <= 0 ||
+      paymentFrequency <= 0
+    ) {
+      console.warn(
+        'Please enter valid positive values for Loan Amount, Interest Rate, Loan Term, and Payment Frequency.',
+      );
+
+      monthlyPaymentEl.textContent = '$0.00';
+      totalPaymentEl.textContent = '$0.00';
+      totalInterestEl.textContent = '$0.00';
+      updateChart(0, 0);
+      updateAmortizationTable([]);
+      return;
+    }
+
+    // Calculate mortgage
+    const { paymentAmount, totalPayment, totalInterest } = calculateMortgage(
+      loanAmount,
+      interestRate,
+      loanTerm,
+      paymentFrequency,
+    );
+
+    // Update results in the DOM
+    monthlyPaymentEl.textContent = formatCurrency(paymentAmount);
+    totalPaymentEl.textContent = formatCurrency(totalPayment);
+    totalInterestEl.textContent = formatCurrency(totalInterest);
+
+    // Generate amortization schedule
+    const schedule = generateAmortizationSchedule(
+      loanAmount,
+      interestRate,
+      loanTerm,
+      paymentFrequency,
+      paymentAmount,
+    );
+
+    // Update chart with the loan's principal and total interest
+    updateChart(loanAmount, totalInterest);
+
+    // Update amortization table with the generated schedule
+    updateAmortizationTable(schedule);
+  });
+
+  // Initialize with default values by dispatching a submit event on page load
+  mortgageForm.dispatchEvent(new Event('submit'));
 });

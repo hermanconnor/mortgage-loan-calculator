@@ -1,7 +1,9 @@
 import './style.css';
-import { Chart } from 'chart.js';
 import type { AmortizationScheduleEntry } from './types';
 import { formatCurrency, formatDate } from './utils/formatters';
+import { calculateMortgage } from './utils/mortgage-calculator';
+import { generateAmortizationSchedule } from './utils/amortization';
+import { updateChart } from './utils/chart';
 
 document.addEventListener('DOMContentLoaded', () => {
   const mortgageForm = document.getElementById(
@@ -43,63 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
   ) as HTMLButtonElement;
   const pageInfoEl = document.getElementById('page-info') as HTMLElement;
 
-  // CHART INITIALIZATION
-  let paymentChart: any;
-
   // PAGINATION STATE VARIABLES
   let amortizationSchedule: AmortizationScheduleEntry[] = [];
   let currentPage: number = 1;
   const paymentsPerPage: number = 12;
-
-  const updateChart = (principal: number, interest: number): void => {
-    const canvas = document.getElementById(
-      'payment-chart',
-    ) as HTMLCanvasElement;
-
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-
-    // Destroy previous chart if it exists to prevent memory leaks and issues with re-rendering
-    if (paymentChart) {
-      paymentChart.destroy();
-    }
-
-    paymentChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Principal', 'Interest'],
-        datasets: [
-          {
-            data: [principal, interest],
-            backgroundColor: ['#155dfb', '#ef4444'],
-            borderWidth: 0,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false, // Allows the chart to fill its container
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              font: {
-                size: 14,
-              },
-            },
-          },
-          tooltip: {
-            callbacks: {
-              label: (context: any) => {
-                const label = context.label || '';
-                const value = context.raw;
-                return `${label}: ${formatCurrency(value)}`;
-              },
-            },
-          },
-        },
-      },
-    });
-  };
 
   const displayCurrentPage = (): void => {
     amortizationTable.innerHTML = '';
@@ -124,12 +73,24 @@ document.addEventListener('DOMContentLoaded', () => {
       row.classList.add('hover:bg-gray-50');
 
       row.innerHTML = `
-        <td class="p-3 text-left border-b">${payment.paymentNumber}</td>
-        <td>${formatDate(payment.paymentDate)}</td>
-        <td>${formatCurrency(payment.paymentAmount)}</td>
-        <td>${formatCurrency(payment.principalPayment)}</td>
-        <td>${formatCurrency(payment.interestPayment)}</td>
-        <td>${formatCurrency(payment.remainingBalance)}</td>
+        <td class="p-3 text-left border-b border-b-gray-300">${
+          payment.paymentNumber
+        }</td>
+        <td class="p-3 text-left border-b border-b-gray-300">${formatDate(
+          payment.paymentDate,
+        )}</td>
+        <td class="p-3 text-left border-b border-b-gray-300">${formatCurrency(
+          payment.paymentAmount,
+        )}</td>
+        <td class="p-3 text-left border-b border-b-gray-300">${formatCurrency(
+          payment.principalPayment,
+        )}</td>
+        <td class="p-3 text-left border-b border-b-gray-300">${formatCurrency(
+          payment.interestPayment,
+        )}</td>
+        <td class="p-3 text-left border-b border-b-gray-300">${formatCurrency(
+          payment.remainingBalance,
+        )}</td>
       `;
 
       amortizationTable.appendChild(row);
@@ -148,4 +109,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update the table with the current page
     displayCurrentPage();
   };
+
+  // ::: EVENT LISTENERS :::
+  //
+  prevPageButton.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayCurrentPage();
+    }
+  });
+
+  nextPageButton.addEventListener('click', () => {
+    const totalPages = Math.ceil(amortizationSchedule.length / paymentsPerPage);
+
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayCurrentPage();
+    }
+  });
 });

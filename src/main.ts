@@ -110,30 +110,14 @@ document.addEventListener('DOMContentLoaded', () => {
     displayCurrentPage();
   };
 
-  // ::: EVENT LISTENERS :::
-  //
-  prevPageButton.addEventListener('click', () => {
-    if (currentPage > 1) {
-      currentPage--;
-      displayCurrentPage();
+  const handleFormSubmit = (event?: Event) => {
+    if (event) {
+      event.preventDefault();
     }
-  });
-
-  nextPageButton.addEventListener('click', () => {
-    const totalPages = Math.ceil(amortizationSchedule.length / paymentsPerPage);
-
-    if (currentPage < totalPages) {
-      currentPage++;
-      displayCurrentPage();
-    }
-  });
-
-  mortgageForm.addEventListener('submit', (e: SubmitEvent) => {
-    e.preventDefault();
 
     const loanAmountRaw = parseFloat(loanAmountInput.value) || 0;
     const downPaymentRaw = parseFloat(downPaymentInput.value || '0') || 0;
-    const loanAmount: number = loanAmountRaw - downPaymentRaw;
+    const loanAmount = loanAmountRaw - downPaymentRaw;
     const interestRate = parseFloat(interestRateInput.value) || 0;
     const loanTerm = parseInt(loanTermInput.value) || 0;
     const paymentFrequency = parseInt(paymentFrequencySelect.value) || 0;
@@ -147,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn(
         'Please enter valid positive values for Loan Amount, Interest Rate, Loan Term, and Payment Frequency.',
       );
-
+      // Optionally display a user-friendly message on the UI
       monthlyPaymentEl.textContent = '$0.00';
       totalPaymentEl.textContent = '$0.00';
       totalInterestEl.textContent = '$0.00';
@@ -183,8 +167,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update amortization table with the generated schedule
     updateAmortizationTable(schedule);
+  };
+
+  // ::: EVENT LISTENERS :::
+  prevPageButton.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayCurrentPage();
+    }
   });
 
-  // Initialize with default values by dispatching a submit event on page load
-  mortgageForm.dispatchEvent(new Event('submit'));
+  nextPageButton.addEventListener('click', () => {
+    const totalPages = Math.ceil(amortizationSchedule.length / paymentsPerPage);
+
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayCurrentPage();
+    }
+  });
+
+  mortgageForm.addEventListener('submit', handleFormSubmit);
+
+  // Call the function directly on page load to initialize with default values
+  handleFormSubmit();
 });
